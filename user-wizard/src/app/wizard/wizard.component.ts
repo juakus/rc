@@ -1,7 +1,11 @@
+
 import { User } from './../models/user';
 import { DataService } from './../data.service';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { StepOneComponent } from './../step-one/step-one.component';
+import { StepTwoComponent } from './../step-two/step-two.component';
+
 
 @Component({
     selector: 'app-wizard',
@@ -11,66 +15,39 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class WizardComponent implements OnInit {
 
     isLinear: boolean = true;
-    userFormGroup: FormGroup;
-
-    roles: any = [];
     preview: any = [];
-    user: any;
 
-    constructor(private fb: FormBuilder, public data: DataService) {
+    @ViewChild(StepOneComponent) stepOne;
+    @ViewChild(StepTwoComponent) stepTwo;
+
+    constructor(public data: DataService) {
     }
 
     ngOnInit() {
-        this.userFormGroup = this.fb.group({
-            name: [''],
-            last_name: [''],
-            email: ['']
-        });
-
-        this.data.getRoles().subscribe(dat => {
-            this.roles = dat;
-            this.clearSelection();
-        });
-    }
-
-    getObjectUser(){
-        let userObj = this.userFormGroup.value,
-            selectedRoles = this.roles.filter(x => x.selected),
-            selectedIds = [];
-        
-        selectedRoles.forEach(x => {
-            selectedIds.push(x.id);
-        });
-
-        userObj.roles = selectedIds;
-
-        return userObj;
     }
 
     setPreview() {
-        this.preview = [];
-        this.user = this.getObjectUser();
-        
-        for (let key in this.user) {
-            this.preview.push({ field: key, value: this.user[key] });
-        }
+        this.stepOne.user.roles = this.stepTwo.selectedRoles;
+        this.data.changeUser(this.stepOne.user);
+    }
 
+    resetFormData(){
+        this.stepOne.user = {
+            name: '',
+            last_name: '',
+            email: '',
+            roles: []
+        };
+        this.stepTwo.selectedRoles = [];
     }
 
     submitUser() {
-       const userToSave: User = this.user as User;
+        const newUser: User = this.stepOne.user as User;
 
-        this.data.addUser(userToSave).subscribe(() => {
+        this.data.addUser(newUser).subscribe(() => {
+            this.resetFormData();
             alert('New user added');
         });
-    }
-
-    updateSelection(role) {
-        role.selected = !role.selected;
-    }
-
-    clearSelection() {
-        this.roles.forEach(x => x.selected = false);
     }
 
 }
