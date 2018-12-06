@@ -16,6 +16,7 @@ export class WizardComponent implements OnInit {
 
     isLinear: boolean = true;
     preview: any = [];
+    roles: any = [];
 
     @ViewChild(StepOneComponent) stepOne;
     @ViewChild(StepTwoComponent) stepTwo;
@@ -24,21 +25,34 @@ export class WizardComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.data.getRoles().subscribe(dat => {
+            this.roles = dat;
+            this.clearSelection();
+        });
     }
 
     setPreview() {
-        this.stepOne.user.roles = this.stepTwo.selectedRoles;
+        let roles = this.roles,
+            ids = [];
+
+        roles.forEach(x => {
+            if (x.selected) ids.push(x.id);
+        });
+
+        this.stepOne.user.roles = ids;
         this.data.changeUser(this.stepOne.user);
     }
 
-    resetFormData(){
-        this.stepOne.user = {
-            name: '',
-            last_name: '',
-            email: '',
-            roles: []
-        };
-        this.stepTwo.selectedRoles = [];
+    resetFormData() {
+        let blankUser = {
+                name: '',
+                last_name: '',
+                email: '',
+                roles: []
+            };
+
+        this.data.changeUser(blankUser);
+        this.clearSelection();
     }
 
     submitUser() {
@@ -48,6 +62,11 @@ export class WizardComponent implements OnInit {
             this.resetFormData();
             alert('New user added');
         });
+    }
+
+    clearSelection() {
+        this.roles.forEach(x => x.selected = false);
+        this.data.changeSelectedRoles(this.roles);
     }
 
 }

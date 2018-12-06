@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DataService } from "../data.service";
 
 @Component({
     selector: 'app-step-one',
@@ -7,16 +8,14 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class StepOneComponent implements OnInit {
 
-    user: any = {
-        name: '',
-        last_name: '',
-        email: '',
-        roles: []
-    };
+    user: any;
 
-    constructor() { }
+    constructor(private data: DataService) { }
 
     ngOnInit() {
+        this.data.currentUser.subscribe(user => {
+            this.user = user;
+        })
     }
 
 }

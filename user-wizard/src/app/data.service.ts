@@ -13,8 +13,16 @@ export class DataService {
     roles_url: string = 'https://raw.githubusercontent.com/roycecorp/challenge/master/roles.json';
     users_url: string = 'http://localhost:3000/royce-users';
 
-    private userSource = new BehaviorSubject({});
+    private userSource = new BehaviorSubject({
+        name: '',
+        last_name: '',
+        email: '',
+        roles: []
+    });
     currentUser = this.userSource.asObservable();
+
+    private selectedRolesSource = new BehaviorSubject([]);
+    currentselectedRoles = this.selectedRolesSource.asObservable();
 
     constructor(private http: HttpClient) { }
 
@@ -28,5 +36,9 @@ export class DataService {
 
     changeUser(user: any) {
         this.userSource.next(user);
+    }
+
+    changeSelectedRoles(selected: any) {
+        this.selectedRolesSource.next(selected);
     }
 }

@@ -1,7 +1,7 @@
 <mat-card>
     <mat-card-content>
         <mat-selection-list>
-            <mat-list-option *ngFor="let role of roles" (click)="updateSelection(role)">
+            <mat-list-option *ngFor="let role of roles" (click)="updateSelection(role)" [selected]="role.selected">
                 {{role.name}}
             </mat-list-option>
         </mat-selection-list>
