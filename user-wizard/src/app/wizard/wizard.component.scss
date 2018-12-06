@@ -1,0 +1,12 @@
+.field-full-width {
+    display: flex;
+    flex-direction: column;
+}
+  
+.field-full-width > * {
+    width: 100%;
+}
+
+button {
+    width: 100px;
+}

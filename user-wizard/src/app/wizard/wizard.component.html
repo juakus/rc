@@ -1,0 +1,61 @@
+<mat-horizontal-stepper [linear]="isLinear" labelPosition="bottom" #stepper>
+    <mat-step [stepControl]="userFormGroup">
+        <mat-card style="margin-top:5px; margin-bottom: 10px">
+            <mat-card-content>
+                <form [formGroup]="userFormGroup">
+                    <ng-template matStepLabel>Fill out info</ng-template>
+                    <div class="field-full-width">
+                        <mat-form-field>
+                            <input matInput placeholder="First Name" formControlName="name">
+                        </mat-form-field>
+                        <br>
+                        <mat-form-field>
+                            <input matInput placeholder="Last Name" formControlName="last_name">
+                        </mat-form-field>
+                        <br>
+                        <mat-form-field>
+                            <input matInput placeholder="Email" formControlName="email">
+                        </mat-form-field>
+                    </div>
+
+                    <div align="center">
+                        <button mat-raised-button color="accent" matStepperNext>Next</button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Roles selection</ng-template>
+        <mat-card style="margin-top:5px; margin-bottom: 10px">
+            <mat-card-content>
+                <mat-selection-list #allroles>
+                    <mat-list-option *ngFor="let role of roles" (click)="updateSelection(role)">
+                        {{role.name}}
+                    </mat-list-option>
+                </mat-selection-list>
+            </mat-card-content>
+        </mat-card>
+        <div align="center">
+            <button mat-raised-button matStepperPrevious>Back</button>
+            <button mat-raised-button color="accent" matStepperNext (click)="setPreview()">Next</button>
+        </div>
+
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Preview Info</ng-template>
+        <mat-card style="margin-top:5px; margin-bottom: 10px">
+            <mat-card-content>
+                <mat-list role="list">
+                    <mat-list-item role="listitem" *ngFor="let item of preview">
+                        {{ item.field }}: {{ item.value }}
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+        <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="submitUser(); stepper.reset()">Submit</button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper>
