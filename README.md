@@ -1,1 +1,1 @@
-# This is an Angular wizard test project using 'material'
+# This is a wizard test project using angular(7) and 'material'
