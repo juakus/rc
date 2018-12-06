@@ -1,1 +1,1 @@
-# Used Angular Material
+# This is an Angular wizard test project using 'material'
